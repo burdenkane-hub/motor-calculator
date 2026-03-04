@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "https://github.com/burdenkane-hub/motor-calculator",
+            "request": "launch",
+            "url": "https://github.com/burdenkane-hub/motor-calculator"
+        }
+    ]
+}

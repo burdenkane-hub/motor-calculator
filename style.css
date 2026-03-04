@@ -7,15 +7,15 @@
 }
 
 :root {
-  --color-bg: #f4f6f9;
-  --color-card: #ffffff;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-text: #1e293b;
-  --color-muted: #64748b;
-  --color-border: #e2e8f0;
-  --color-result-bg: #f0f9ff;
-  --color-formula-bg: #f8fafc;
+  --color-bg: #0a0a0a;
+  --color-card: #1f1f1f;
+  --color-primary: #ff8c00;
+  --color-primary-hover: #e67e00;
+  --color-text: #ffffff;
+  --color-muted: #b0b0b0;
+  --color-border: #333333;
+  --color-result-bg: #1a1a1a;
+  --color-formula-bg: #2a2a2a;
   --radius: 12px;
 }
 
@@ -119,7 +119,7 @@ main {
 .inputs input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
 }
 
 button {
@@ -158,8 +158,8 @@ button:hover {
 }
 
 .result.error {
-  color: #dc2626;
-  background: #fef2f2;
+  color: #ff6b6b;
+  background: #2a1a1a;
 }
 
 footer {
