@@ -9,139 +9,150 @@
   <body>
     <header>
       <h1>Motor Calculator</h1>
-      <p class="subtitle">Electric motor sizing and performance calculations</p>
+      <p class="subtitle">Unified electric motor sizing and performance calculator</p>
     </header>
 
     <main>
-      <div class="calculator-grid">
+      <div class="unified-calculator">
+        
+        <!-- Mode Selector -->
+        <div class="mode-selector">
+          <button class="mode-btn active" data-mode="power-speed">Power & Speed</button>
+          <button class="mode-btn" data-mode="torque-speed">Torque & Speed</button>
+          <button class="mode-btn" data-mode="custom">Custom</button>
+        </div>
 
-        <!-- Torque Calculator -->
-        <section class="calc-card" id="torque-calc">
-          <h2>Torque Calculator</h2>
-          <p class="description">Calculate torque from power and speed.</p>
-          <div class="formula">T = P &times; 9549 / N</div>
-          <div class="inputs">
+        <!-- Input Section -->
+        <section class="calc-card inputs-section">
+          <h2>Motor Inputs</h2>
+          
+          <!-- Power & Speed Mode -->
+          <div class="mode-content active" id="mode-power-speed">
             <label>
-              Power (kW): <span id="torque-power-display">5</span>
-              <input type="range" id="torque-power" min="0" max="100" value="5" step="0.1" />
+              Power (kW): <span id="display-power">5</span>
+              <input type="range" id="input-power" min="0.1" max="200" value="5" step="0.1" />
             </label>
             <label>
-              Speed (RPM): <span id="torque-speed-display">1500</span>
-              <input type="range" id="torque-speed" min="0" max="3000" value="1500" step="10" />
+              Speed (RPM): <span id="display-speed">1500</span>
+              <input type="range" id="input-speed" min="100" max="3600" value="1500" step="50" />
+            </label>
+            <label>
+              Efficiency (0–1): <span id="display-eff-ps">0.9</span>
+              <input type="range" id="input-eff-ps" min="0.5" max="1" value="0.9" step="0.01" />
             </label>
           </div>
-          <button onclick="calculateTorque()">Calculate</button>
-          <div class="result" id="torque-result"></div>
+
+          <!-- Torque & Speed Mode -->
+          <div class="mode-content" id="mode-torque-speed">
+            <label>
+              Torque (Nm): <span id="display-torque">31.8</span>
+              <input type="range" id="input-torque" min="1" max="1000" value="31.8" step="0.1" />
+            </label>
+            <label>
+              Speed (RPM): <span id="display-speed-ts">1500</span>
+              <input type="range" id="input-speed-ts" min="100" max="3600" value="1500" step="50" />
+            </label>
+            <label>
+              Efficiency (0–1): <span id="display-eff-ts">0.9</span>
+              <input type="range" id="input-eff-ts" min="0.5" max="1" value="0.9" step="0.01" />
+            </label>
+          </div>
+
+          <!-- Custom Mode -->
+          <div class="mode-content" id="mode-custom">
+            <label>
+              Power (kW): <span id="display-power-custom">5</span>
+              <input type="range" id="input-power-custom" min="0.1" max="200" value="5" step="0.1" />
+            </label>
+            <label>
+              Torque (Nm): <span id="display-torque-custom">31.8</span>
+              <input type="range" id="input-torque-custom" min="1" max="1000" value="31.8" step="0.1" />
+            </label>
+            <label>
+              Speed (RPM): <span id="display-speed-custom">1500</span>
+              <input type="range" id="input-speed-custom" min="100" max="3600" value="1500" step="50" />
+            </label>
+            <label>
+              Voltage (V): <span id="display-voltage-custom">400</span>
+              <input type="range" id="input-voltage-custom" min="100" max="690" value="400" step="10" />
+            </label>
+            <label>
+              Power Factor: <span id="display-pf-custom">0.85</span>
+              <input type="range" id="input-pf-custom" min="0.7" max="1" value="0.85" step="0.01" />
+            </label>
+            <label>
+              Efficiency (0–1): <span id="display-eff-custom">0.9</span>
+              <input type="range" id="input-eff-custom" min="0.5" max="1" value="0.9" step="0.01" />
+            </label>
+          </div>
         </section>
 
-        <!-- Power Calculator -->
-        <section class="calc-card" id="power-calc">
-          <h2>Power Calculator</h2>
-          <p class="description">Calculate power from torque and speed.</p>
-          <div class="formula">P = T &times; N / 9549</div>
-          <div class="inputs">
-            <label>
-              Torque (Nm): <span id="power-torque-display">31.8</span>
-              <input type="range" id="power-torque" min="0" max="500" value="31.8" step="0.1" />
-            </label>
-            <label>
-              Speed (RPM): <span id="power-speed-display">1500</span>
-              <input type="range" id="power-speed" min="0" max="3000" value="1500" step="10" />
-            </label>
-          </div>
-          <button onclick="calculatePower()">Calculate</button>
-          <div class="result" id="power-result"></div>
-        </section>
+        <!-- Results Section -->
+        <section class="calc-card results-section">
+          <h2>Motor Specifications</h2>
+          
+          <div class="results-grid">
+            <!-- Electrical Parameters -->
+            <div class="result-group">
+              <h3>Electrical Parameters</h3>
+              <div class="result-item">
+                <span class="label">Power:</span>
+                <span class="value" id="result-power">5.0 kW</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Torque:</span>
+                <span class="value" id="result-torque">31.83 Nm</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Speed:</span>
+                <span class="value" id="result-speed">1500 RPM</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Current (3-phase):</span>
+                <span class="value" id="result-current">8.33 A</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Efficiency:</span>
+                <span class="value" id="result-efficiency">90.0%</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Power Factor:</span>
+                <span class="value" id="result-pf">0.85</span>
+              </div>
+            </div>
 
-        <!-- Speed Calculator -->
-        <section class="calc-card" id="speed-calc">
-          <h2>Speed Calculator</h2>
-          <p class="description">Calculate synchronous speed from frequency and poles.</p>
-          <div class="formula">N<sub>s</sub> = 120 &times; f / P</div>
-          <div class="inputs">
-            <label>
-              Frequency (Hz): <span id="speed-freq-display">50</span>
-              <input type="range" id="speed-freq" min="0" max="100" value="50" step="1" />
-            </label>
-            <label>
-              Number of Poles: <span id="speed-poles-display">4</span>
-              <input type="range" id="speed-poles" min="2" max="12" value="4" step="2" />
-            </label>
+            <!-- Motor Sizing -->
+            <div class="result-group">
+              <h3>Motor Sizing (IEC Standard)</h3>
+              <div class="result-item">
+                <span class="label">Frame Size:</span>
+                <span class="value" id="result-frame">IEC 90</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Estimated Weight:</span>
+                <span class="value" id="result-weight">35 kg</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Synchronous Speed:</span>
+                <span class="value" id="result-sync-speed">1500 RPM</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Slip:</span>
+                <span class="value" id="result-slip">0%</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Pole Pairs:</span>
+                <span class="value" id="result-poles">2</span>
+              </div>
+            </div>
           </div>
-          <button onclick="calculateSpeed()">Calculate</button>
-          <div class="result" id="speed-result"></div>
-        </section>
-
-        <!-- Efficiency Calculator -->
-        <section class="calc-card" id="efficiency-calc">
-          <h2>Efficiency Calculator</h2>
-          <p class="description">Calculate motor efficiency from input and output power.</p>
-          <div class="formula">&eta; = (P<sub>out</sub> / P<sub>in</sub>) &times; 100</div>
-          <div class="inputs">
-            <label>
-              Output Power (kW): <span id="eff-output-display">4.5</span>
-              <input type="range" id="eff-output" min="0" max="100" value="4.5" step="0.1" />
-            </label>
-            <label>
-              Input Power (kW): <span id="eff-input-display">5</span>
-              <input type="range" id="eff-input" min="0" max="100" value="5" step="0.1" />
-            </label>
-          </div>
-          <button onclick="calculateEfficiency()">Calculate</button>
-          <div class="result" id="efficiency-result"></div>
-        </section>
-
-        <!-- Current Calculator -->
-        <section class="calc-card" id="current-calc">
-          <h2>Current Calculator</h2>
-          <p class="description">Estimate full-load current for a 3-phase motor.</p>
-          <div class="formula">I = P &times; 1000 / (&radic;3 &times; V &times; &eta; &times; pf)</div>
-          <div class="inputs">
-            <label>
-              Power (kW): <span id="current-power-display">5</span>
-              <input type="range" id="current-power" min="0" max="100" value="5" step="0.1" />
-            </label>
-            <label>
-              Voltage (V): <span id="current-voltage-display">400</span>
-              <input type="range" id="current-voltage" min="0" max="690" value="400" step="10" />
-            </label>
-            <label>
-              Efficiency (0–1): <span id="current-eff-display">0.9</span>
-              <input type="range" id="current-eff" min="0" max="1" value="0.9" step="0.01" />
-            </label>
-            <label>
-              Power Factor (0–1): <span id="current-pf-display">0.85</span>
-              <input type="range" id="current-pf" min="0" max="1" value="0.85" step="0.01" />
-            </label>
-          </div>
-          <button onclick="calculateCurrent()">Calculate</button>
-          <div class="result" id="current-result"></div>
-        </section>
-
-        <!-- Slip Calculator -->
-        <section class="calc-card" id="slip-calc">
-          <h2>Slip Calculator</h2>
-          <p class="description">Calculate motor slip percentage.</p>
-          <div class="formula">Slip = (N<sub>s</sub> - N<sub>r</sub>) / N<sub>s</sub> &times; 100</div>
-          <div class="inputs">
-            <label>
-              Synchronous Speed (RPM): <span id="slip-sync-display">1500</span>
-              <input type="range" id="slip-sync" min="0" max="3000" value="1500" step="10" />
-            </label>
-            <label>
-              Rotor Speed (RPM): <span id="slip-rotor-display">1450</span>
-              <input type="range" id="slip-rotor" min="0" max="3000" value="1450" step="10" />
-            </label>
-          </div>
-          <button onclick="calculateSlip()">Calculate</button>
-          <div class="result" id="slip-result"></div>
         </section>
 
       </div>
     </main>
 
     <footer>
-      <p>Motor Calculator &mdash; Electric motor sizing and performance tools</p>
+      <p>Motor Calculator &mdash; Unified electric motor sizing and performance tool</p>
     </footer>
 
     <script type="module" src="/main.js"></script>

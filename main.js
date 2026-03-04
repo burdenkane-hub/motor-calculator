@@ -1,108 +1,161 @@
-function showResult(elementId, text, isError = false) {
-  const el = document.getElementById(elementId);
-  el.textContent = text;
-  el.classList.toggle('error', isError);
-}
+// Motor frame sizes (IEC standard) with weight estimates
+const motorFrames = [
+  { power: 0, frame: 'IEC 56', weight: 5 },
+  { power: 0.18, frame: 'IEC 63', weight: 8 },
+  { power: 0.37, frame: 'IEC 71', weight: 14 },
+  { power: 0.75, frame: 'IEC 80', weight: 22 },
+  { power: 1.5, frame: 'IEC 90', weight: 35 },
+  { power: 3, frame: 'IEC 100', weight: 55 },
+  { power: 5.5, frame: 'IEC 112', weight: 80 },
+  { power: 11, frame: 'IEC 132', weight: 130 },
+  { power: 15, frame: 'IEC 160', weight: 190 },
+  { power: 22, frame: 'IEC 180', weight: 260 },
+  { power: 30, frame: 'IEC 200', weight: 350 },
+  { power: 37, frame: 'IEC 225', weight: 450 },
+  { power: 45, frame: 'IEC 250', weight: 550 },
+  { power: 55, frame: 'IEC 280', weight: 680 },
+  { power: 75, frame: 'IEC 315', weight: 870 },
+  { power: 90, frame: 'IEC 355', weight: 1100 },
+  { power: 110, frame: 'IEC 400', weight: 1450 },
+  { power: 132, frame: 'IEC 450', weight: 1750 }
+];
 
-function getVal(id) {
-  const v = parseFloat(document.getElementById(id).value);
-  return isNaN(v) ? null : v;
-}
-
-// Update slider displays when they change
-document.addEventListener('DOMContentLoaded', function() {
-  const sliders = document.querySelectorAll('input[type="range"]');
-  sliders.forEach(slider => {
-    const displayId = slider.id + '-display';
-    const displayEl = document.getElementById(displayId);
-    if (displayEl) {
-      slider.addEventListener('input', function() {
-        const val = parseFloat(this.value);
-        displayEl.textContent = val % 1 === 0 ? val : val.toFixed(2);
-      });
+function getMotorFrame(power) {
+  for (let i = motorFrames.length - 1; i >= 0; i--) {
+    if (power >= motorFrames[i].power) {
+      return motorFrames[i];
     }
+  }
+  return motorFrames[0];
+}
+
+function updateDisplays() {
+  const currentMode = document.querySelector('.mode-content.active').id;
+  
+  if (currentMode === 'mode-power-speed') {
+    updateDisplay('power', 'display-power', 1);
+    updateDisplay('speed', 'display-speed', 0);
+    updateDisplay('eff-ps', 'display-eff-ps', 2);
+  } else if (currentMode === 'mode-torque-speed') {
+    updateDisplay('torque', 'display-torque', 1);
+    updateDisplay('speed-ts', 'display-speed-ts', 0);
+    updateDisplay('eff-ts', 'display-eff-ts', 2);
+  } else if (currentMode === 'mode-custom') {
+    updateDisplay('power-custom', 'display-power-custom', 1);
+    updateDisplay('torque-custom', 'display-torque-custom', 1);
+    updateDisplay('speed-custom', 'display-speed-custom', 0);
+    updateDisplay('voltage-custom', 'display-voltage-custom', 0);
+    updateDisplay('pf-custom', 'display-pf-custom', 2);
+    updateDisplay('eff-custom', 'display-eff-custom', 2);
+  }
+}
+
+function updateDisplay(inputId, displayId, decimals) {
+  const input = document.getElementById(`input-${inputId}`);
+  const display = document.getElementById(displayId);
+  if (input && display) {
+    const val = parseFloat(input.value);
+    display.textContent = val.toFixed(decimals);
+  }
+}
+
+function calculateResults() {
+  const currentMode = document.querySelector('.mode-content.active').id;
+  let power, torque, speed, voltage, pf, efficiency;
+
+  if (currentMode === 'mode-power-speed') {
+    power = parseFloat(document.getElementById('input-power').value);
+    speed = parseFloat(document.getElementById('input-speed').value);
+    efficiency = parseFloat(document.getElementById('input-eff-ps').value);
+    voltage = 400; // Default voltage
+    pf = 0.85; // Default power factor
+    
+    if (speed === 0) speed = 1500;
+    torque = (power * 9549) / speed;
+  } else if (currentMode === 'mode-torque-speed') {
+    torque = parseFloat(document.getElementById('input-torque').value);
+    speed = parseFloat(document.getElementById('input-speed').value);
+    efficiency = parseFloat(document.getElementById('input-eff-ts').value);
+    voltage = 400;
+    pf = 0.85;
+    
+    if (speed === 0) speed = 1500;
+    power = (torque * speed) / 9549;
+  } else if (currentMode === 'mode-custom') {
+    power = parseFloat(document.getElementById('input-power-custom').value);
+    torque = parseFloat(document.getElementById('input-torque-custom').value);
+    speed = parseFloat(document.getElementById('input-speed-custom').value);
+    voltage = parseFloat(document.getElementById('input-voltage-custom').value);
+    pf = parseFloat(document.getElementById('input-pf-custom').value);
+    efficiency = parseFloat(document.getElementById('input-eff-custom').value);
+  }
+
+  // Calculate additional parameters
+  const current = (power * 1000) / (Math.sqrt(3) * voltage * efficiency * pf);
+  
+  // Motor poles based on standard speeds (assuming 50 Hz)
+  const syncSpeeds = [3000, 1500, 1000, 750, 600];
+  let poleCount = 2;
+  let syncSpeed = 1500;
+  
+  for (let sync of syncSpeeds) {
+    if (Math.abs(speed - sync) < Math.abs(speed - syncSpeed)) {
+      syncSpeed = sync;
+      poleCount = Math.round((120 * 50) / syncSpeed);
+    }
+  }
+  
+  const slip = syncSpeed > 0 ? ((syncSpeed - speed) / syncSpeed) * 100 : 0;
+  
+  // Get motor frame sizing
+  const frame = getMotorFrame(power);
+
+  // Update results
+  document.getElementById('result-power').textContent = `${power.toFixed(2)} kW`;
+  document.getElementById('result-torque').textContent = `${torque.toFixed(2)} Nm`;
+  document.getElementById('result-speed').textContent = `${Math.round(speed)} RPM`;
+  document.getElementById('result-current').textContent = `${current.toFixed(2)} A`;
+  document.getElementById('result-efficiency').textContent = `${(efficiency * 100).toFixed(1)}%`;
+  document.getElementById('result-pf').textContent = `${pf.toFixed(2)}`;
+  document.getElementById('result-frame').textContent = frame.frame;
+  document.getElementById('result-weight').textContent = `${frame.weight} kg`;
+  document.getElementById('result-sync-speed').textContent = `${syncSpeed} RPM`;
+  document.getElementById('result-slip').textContent = `${slip.toFixed(2)}%`;
+  document.getElementById('result-poles').textContent = `${poleCount / 2}`;
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Mode switching
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  modeBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remove active from all buttons and content
+      modeBtns.forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.mode-content').forEach(c => c.classList.remove('active'));
+      
+      // Add active to clicked button and corresponding content
+      this.classList.add('active');
+      const mode = this.getAttribute('data-mode');
+      document.getElementById(`mode-${mode}`).classList.add('active');
+      
+      // Calculate with new mode
+      updateDisplays();
+      calculateResults();
+    });
   });
 
-  // Auto-calculate on slider change
-  document.getElementById('torque-power').addEventListener('input', calculateTorque);
-  document.getElementById('torque-speed').addEventListener('input', calculateTorque);
+  // Slider input listeners
+  const sliders = document.querySelectorAll('input[type="range"]');
+  sliders.forEach(slider => {
+    slider.addEventListener('input', function() {
+      updateDisplays();
+      calculateResults();
+    });
+  });
 
-  document.getElementById('power-torque').addEventListener('input', calculatePower);
-  document.getElementById('power-speed').addEventListener('input', calculatePower);
-
-  document.getElementById('speed-freq').addEventListener('input', calculateSpeed);
-  document.getElementById('speed-poles').addEventListener('input', calculateSpeed);
-
-  document.getElementById('eff-output').addEventListener('input', calculateEfficiency);
-  document.getElementById('eff-input').addEventListener('input', calculateEfficiency);
-
-  document.getElementById('current-power').addEventListener('input', calculateCurrent);
-  document.getElementById('current-voltage').addEventListener('input', calculateCurrent);
-  document.getElementById('current-eff').addEventListener('input', calculateCurrent);
-  document.getElementById('current-pf').addEventListener('input', calculateCurrent);
-
-  document.getElementById('slip-sync').addEventListener('input', calculateSlip);
-  document.getElementById('slip-rotor').addEventListener('input', calculateSlip);
+  // Initial calculation
+  updateDisplays();
+  calculateResults();
 });
 
-// Torque: T = P * 9549 / N
-window.calculateTorque = function () {
-  const P = getVal('torque-power');
-  const N = getVal('torque-speed');
-  if (P == null || N == null) return showResult('torque-result', 'Please fill in all fields.', true);
-  if (N === 0) return showResult('torque-result', 'Speed cannot be zero.', true);
-  const T = (P * 9549) / N;
-  showResult('torque-result', `Torque = ${T.toFixed(2)} Nm`);
-};
-
-// Power: P = T * N / 9549
-window.calculatePower = function () {
-  const T = getVal('power-torque');
-  const N = getVal('power-speed');
-  if (T == null || N == null) return showResult('power-result', 'Please fill in all fields.', true);
-  const P = (T * N) / 9549;
-  showResult('power-result', `Power = ${P.toFixed(2)} kW`);
-};
-
-// Synchronous Speed: Ns = 120 * f / P
-window.calculateSpeed = function () {
-  const f = getVal('speed-freq');
-  const poles = getVal('speed-poles');
-  if (f == null || poles == null) return showResult('speed-result', 'Please fill in all fields.', true);
-  if (poles === 0) return showResult('speed-result', 'Poles cannot be zero.', true);
-  const Ns = (120 * f) / poles;
-  showResult('speed-result', `Synchronous Speed = ${Ns.toFixed(0)} RPM`);
-};
-
-// Efficiency: η = (Pout / Pin) * 100
-window.calculateEfficiency = function () {
-  const Pout = getVal('eff-output');
-  const Pin = getVal('eff-input');
-  if (Pout == null || Pin == null) return showResult('efficiency-result', 'Please fill in all fields.', true);
-  if (Pin === 0) return showResult('efficiency-result', 'Input power cannot be zero.', true);
-  const eff = (Pout / Pin) * 100;
-  showResult('efficiency-result', `Efficiency = ${eff.toFixed(1)}%`);
-};
-
-// Full-load current (3-phase): I = P * 1000 / (√3 * V * η * pf)
-window.calculateCurrent = function () {
-  const P = getVal('current-power');
-  const V = getVal('current-voltage');
-  const eff = getVal('current-eff');
-  const pf = getVal('current-pf');
-  if (P == null || V == null || eff == null || pf == null) return showResult('current-result', 'Please fill in all fields.', true);
-  const denom = Math.sqrt(3) * V * eff * pf;
-  if (denom === 0) return showResult('current-result', 'Divisor values cannot be zero.', true);
-  const I = (P * 1000) / denom;
-  showResult('current-result', `Current = ${I.toFixed(2)} A`);
-};
-
-// Slip: s = (Ns - Nr) / Ns * 100
-window.calculateSlip = function () {
-  const Ns = getVal('slip-sync');
-  const Nr = getVal('slip-rotor');
-  if (Ns == null || Nr == null) return showResult('slip-result', 'Please fill in all fields.', true);
-  if (Ns === 0) return showResult('slip-result', 'Synchronous speed cannot be zero.', true);
-  const slip = ((Ns - Nr) / Ns) * 100;
-  showResult('slip-result', `Slip = ${slip.toFixed(2)}%`);
-};
