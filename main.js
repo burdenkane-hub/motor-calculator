@@ -9,6 +9,21 @@ function getVal(id) {
   return isNaN(v) ? null : v;
 }
 
+// Update slider displays when they change
+document.addEventListener('DOMContentLoaded', function() {
+  const sliders = document.querySelectorAll('input[type="range"]');
+  sliders.forEach(slider => {
+    const displayId = slider.id + '-display';
+    const displayEl = document.getElementById(displayId);
+    if (displayEl) {
+      slider.addEventListener('input', function() {
+        const val = parseFloat(this.value);
+        displayEl.textContent = val % 1 === 0 ? val : val.toFixed(2);
+      });
+    }
+  });
+});
+
 // Torque: T = P * 9549 / N
 window.calculateTorque = function () {
   const P = getVal('torque-power');

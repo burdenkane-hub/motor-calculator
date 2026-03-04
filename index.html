@@ -22,12 +22,12 @@
           <div class="formula">T = P &times; 9549 / N</div>
           <div class="inputs">
             <label>
-              Power (kW)
-              <input type="number" id="torque-power" step="any" min="0" placeholder="e.g. 5" />
+              Power (kW): <span id="torque-power-display">5</span>
+              <input type="range" id="torque-power" min="0" max="100" value="5" step="0.1" />
             </label>
             <label>
-              Speed (RPM)
-              <input type="number" id="torque-speed" step="any" min="0" placeholder="e.g. 1500" />
+              Speed (RPM): <span id="torque-speed-display">1500</span>
+              <input type="range" id="torque-speed" min="0" max="3000" value="1500" step="10" />
             </label>
           </div>
           <button onclick="calculateTorque()">Calculate</button>
@@ -41,12 +41,12 @@
           <div class="formula">P = T &times; N / 9549</div>
           <div class="inputs">
             <label>
-              Torque (Nm)
-              <input type="number" id="power-torque" step="any" min="0" placeholder="e.g. 31.8" />
+              Torque (Nm): <span id="power-torque-display">31.8</span>
+              <input type="range" id="power-torque" min="0" max="500" value="31.8" step="0.1" />
             </label>
             <label>
-              Speed (RPM)
-              <input type="number" id="power-speed" step="any" min="0" placeholder="e.g. 1500" />
+              Speed (RPM): <span id="power-speed-display">1500</span>
+              <input type="range" id="power-speed" min="0" max="3000" value="1500" step="10" />
             </label>
           </div>
           <button onclick="calculatePower()">Calculate</button>
@@ -60,12 +60,12 @@
           <div class="formula">N<sub>s</sub> = 120 &times; f / P</div>
           <div class="inputs">
             <label>
-              Frequency (Hz)
-              <input type="number" id="speed-freq" step="any" min="0" value="50" placeholder="e.g. 50" />
+              Frequency (Hz): <span id="speed-freq-display">50</span>
+              <input type="range" id="speed-freq" min="0" max="100" value="50" step="1" />
             </label>
             <label>
-              Number of Poles
-              <input type="number" id="speed-poles" step="2" min="2" value="4" placeholder="e.g. 4" />
+              Number of Poles: <span id="speed-poles-display">4</span>
+              <input type="range" id="speed-poles" min="2" max="12" value="4" step="2" />
             </label>
           </div>
           <button onclick="calculateSpeed()">Calculate</button>
@@ -79,12 +79,12 @@
           <div class="formula">&eta; = (P<sub>out</sub> / P<sub>in</sub>) &times; 100</div>
           <div class="inputs">
             <label>
-              Output Power (kW)
-              <input type="number" id="eff-output" step="any" min="0" placeholder="e.g. 4.5" />
+              Output Power (kW): <span id="eff-output-display">4.5</span>
+              <input type="range" id="eff-output" min="0" max="100" value="4.5" step="0.1" />
             </label>
             <label>
-              Input Power (kW)
-              <input type="number" id="eff-input" step="any" min="0" placeholder="e.g. 5" />
+              Input Power (kW): <span id="eff-input-display">5</span>
+              <input type="range" id="eff-input" min="0" max="100" value="5" step="0.1" />
             </label>
           </div>
           <button onclick="calculateEfficiency()">Calculate</button>
@@ -98,20 +98,20 @@
           <div class="formula">I = P &times; 1000 / (&radic;3 &times; V &times; &eta; &times; pf)</div>
           <div class="inputs">
             <label>
-              Power (kW)
-              <input type="number" id="current-power" step="any" min="0" placeholder="e.g. 5" />
+              Power (kW): <span id="current-power-display">5</span>
+              <input type="range" id="current-power" min="0" max="100" value="5" step="0.1" />
             </label>
             <label>
-              Voltage (V)
-              <input type="number" id="current-voltage" step="any" min="0" value="400" placeholder="e.g. 400" />
+              Voltage (V): <span id="current-voltage-display">400</span>
+              <input type="range" id="current-voltage" min="0" max="690" value="400" step="10" />
             </label>
             <label>
-              Efficiency (0–1)
-              <input type="number" id="current-eff" step="any" min="0" max="1" value="0.9" placeholder="e.g. 0.9" />
+              Efficiency (0–1): <span id="current-eff-display">0.9</span>
+              <input type="range" id="current-eff" min="0" max="1" value="0.9" step="0.01" />
             </label>
             <label>
-              Power Factor (0–1)
-              <input type="number" id="current-pf" step="any" min="0" max="1" value="0.85" placeholder="e.g. 0.85" />
+              Power Factor (0–1): <span id="current-pf-display">0.85</span>
+              <input type="range" id="current-pf" min="0" max="1" value="0.85" step="0.01" />
             </label>
           </div>
           <button onclick="calculateCurrent()">Calculate</button>
@@ -125,12 +125,12 @@
           <div class="formula">Slip = (N<sub>s</sub> - N<sub>r</sub>) / N<sub>s</sub> &times; 100</div>
           <div class="inputs">
             <label>
-              Synchronous Speed (RPM)
-              <input type="number" id="slip-sync" step="any" min="0" placeholder="e.g. 1500" />
+              Synchronous Speed (RPM): <span id="slip-sync-display">1500</span>
+              <input type="range" id="slip-sync" min="0" max="3000" value="1500" step="10" />
             </label>
             <label>
-              Rotor Speed (RPM)
-              <input type="number" id="slip-rotor" step="any" min="0" placeholder="e.g. 1450" />
+              Rotor Speed (RPM): <span id="slip-rotor-display">1450</span>
+              <input type="range" id="slip-rotor" min="0" max="3000" value="1450" step="10" />
             </label>
           </div>
           <button onclick="calculateSlip()">Calculate</button>
