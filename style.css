@@ -113,7 +113,12 @@ main {
   border-radius: 8px;
   font-size: 1rem;
   color: var(--color-text);
+  background: #0f0f0f;
   transition: border-color 0.2s;
+}
+
+.inputs input::placeholder {
+  color: #707070;
 }
 
 .inputs input:focus {
