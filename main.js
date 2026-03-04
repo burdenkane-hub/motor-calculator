@@ -22,6 +22,27 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
+
+  // Auto-calculate on slider change
+  document.getElementById('torque-power').addEventListener('input', calculateTorque);
+  document.getElementById('torque-speed').addEventListener('input', calculateTorque);
+
+  document.getElementById('power-torque').addEventListener('input', calculatePower);
+  document.getElementById('power-speed').addEventListener('input', calculatePower);
+
+  document.getElementById('speed-freq').addEventListener('input', calculateSpeed);
+  document.getElementById('speed-poles').addEventListener('input', calculateSpeed);
+
+  document.getElementById('eff-output').addEventListener('input', calculateEfficiency);
+  document.getElementById('eff-input').addEventListener('input', calculateEfficiency);
+
+  document.getElementById('current-power').addEventListener('input', calculateCurrent);
+  document.getElementById('current-voltage').addEventListener('input', calculateCurrent);
+  document.getElementById('current-eff').addEventListener('input', calculateCurrent);
+  document.getElementById('current-pf').addEventListener('input', calculateCurrent);
+
+  document.getElementById('slip-sync').addEventListener('input', calculateSlip);
+  document.getElementById('slip-rotor').addEventListener('input', calculateSlip);
 });
 
 // Torque: T = P * 9549 / N
