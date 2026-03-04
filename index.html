@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motor Calculator</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Motor Calculator</h1>
+      <p class="subtitle">Electric motor sizing and performance calculations</p>
+    </header>
+
+    <main>
+      <div class="calculator-grid">
+
+        <!-- Torque Calculator -->
+        <section class="calc-card" id="torque-calc">
+          <h2>Torque Calculator</h2>
+          <p class="description">Calculate torque from power and speed.</p>
+          <div class="formula">T = P &times; 9549 / N</div>
+          <div class="inputs">
+            <label>
+              Power (kW)
+              <input type="number" id="torque-power" step="any" min="0" placeholder="e.g. 5" />
+            </label>
+            <label>
+              Speed (RPM)
+              <input type="number" id="torque-speed" step="any" min="0" placeholder="e.g. 1500" />
+            </label>
+          </div>
+          <button onclick="calculateTorque()">Calculate</button>
+          <div class="result" id="torque-result"></div>
+        </section>
+
+        <!-- Power Calculator -->
+        <section class="calc-card" id="power-calc">
+          <h2>Power Calculator</h2>
+          <p class="description">Calculate power from torque and speed.</p>
+          <div class="formula">P = T &times; N / 9549</div>
+          <div class="inputs">
+            <label>
+              Torque (Nm)
+              <input type="number" id="power-torque" step="any" min="0" placeholder="e.g. 31.8" />
+            </label>
+            <label>
+              Speed (RPM)
+              <input type="number" id="power-speed" step="any" min="0" placeholder="e.g. 1500" />
+            </label>
+          </div>
+          <button onclick="calculatePower()">Calculate</button>
+          <div class="result" id="power-result"></div>
+        </section>
+
+        <!-- Speed Calculator -->
+        <section class="calc-card" id="speed-calc">
+          <h2>Speed Calculator</h2>
+          <p class="description">Calculate synchronous speed from frequency and poles.</p>
+          <div class="formula">N<sub>s</sub> = 120 &times; f / P</div>
+          <div class="inputs">
+            <label>
+              Frequency (Hz)
+              <input type="number" id="speed-freq" step="any" min="0" value="50" placeholder="e.g. 50" />
+            </label>
+            <label>
+              Number of Poles
+              <input type="number" id="speed-poles" step="2" min="2" value="4" placeholder="e.g. 4" />
+            </label>
+          </div>
+          <button onclick="calculateSpeed()">Calculate</button>
+          <div class="result" id="speed-result"></div>
+        </section>
+
+        <!-- Efficiency Calculator -->
+        <section class="calc-card" id="efficiency-calc">
+          <h2>Efficiency Calculator</h2>
+          <p class="description">Calculate motor efficiency from input and output power.</p>
+          <div class="formula">&eta; = (P<sub>out</sub> / P<sub>in</sub>) &times; 100</div>
+          <div class="inputs">
+            <label>
+              Output Power (kW)
+              <input type="number" id="eff-output" step="any" min="0" placeholder="e.g. 4.5" />
+            </label>
+            <label>
+              Input Power (kW)
+              <input type="number" id="eff-input" step="any" min="0" placeholder="e.g. 5" />
+            </label>
+          </div>
+          <button onclick="calculateEfficiency()">Calculate</button>
+          <div class="result" id="efficiency-result"></div>
+        </section>
+
+        <!-- Current Calculator -->
+        <section class="calc-card" id="current-calc">
+          <h2>Current Calculator</h2>
+          <p class="description">Estimate full-load current for a 3-phase motor.</p>
+          <div class="formula">I = P &times; 1000 / (&radic;3 &times; V &times; &eta; &times; pf)</div>
+          <div class="inputs">
+            <label>
+              Power (kW)
+              <input type="number" id="current-power" step="any" min="0" placeholder="e.g. 5" />
+            </label>
+            <label>
+              Voltage (V)
+              <input type="number" id="current-voltage" step="any" min="0" value="400" placeholder="e.g. 400" />
+            </label>
+            <label>
+              Efficiency (0–1)
+              <input type="number" id="current-eff" step="any" min="0" max="1" value="0.9" placeholder="e.g. 0.9" />
+            </label>
+            <label>
+              Power Factor (0–1)
+              <input type="number" id="current-pf" step="any" min="0" max="1" value="0.85" placeholder="e.g. 0.85" />
+            </label>
+          </div>
+          <button onclick="calculateCurrent()">Calculate</button>
+          <div class="result" id="current-result"></div>
+        </section>
+
+        <!-- Slip Calculator -->
+        <section class="calc-card" id="slip-calc">
+          <h2>Slip Calculator</h2>
+          <p class="description">Calculate motor slip percentage.</p>
+          <div class="formula">Slip = (N<sub>s</sub> - N<sub>r</sub>) / N<sub>s</sub> &times; 100</div>
+          <div class="inputs">
+            <label>
+              Synchronous Speed (RPM)
+              <input type="number" id="slip-sync" step="any" min="0" placeholder="e.g. 1500" />
+            </label>
+            <label>
+              Rotor Speed (RPM)
+              <input type="number" id="slip-rotor" step="any" min="0" placeholder="e.g. 1450" />
+            </label>
+          </div>
+          <button onclick="calculateSlip()">Calculate</button>
+          <div class="result" id="slip-result"></div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer>
+      <p>Motor Calculator &mdash; Electric motor sizing and performance tools</p>
+    </footer>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
