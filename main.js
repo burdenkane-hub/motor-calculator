@@ -122,6 +122,52 @@ function calculateResults() {
   document.getElementById('result-sync-speed').textContent = `${syncSpeed} RPM`;
   document.getElementById('result-slip').textContent = `${slip.toFixed(2)}%`;
   document.getElementById('result-poles').textContent = `${poleCount / 2}`;
+  
+  // Update motor diagram
+  updateMotorDiagram(frame, power, speed);
+}
+
+function updateMotorDiagram(frame, power, speed) {
+  // Update frame label and weight in diagram
+  const frameLabel = document.getElementById('frame-label');
+  const weightLabel = document.getElementById('weight-label');
+  const powerLabel = document.getElementById('power-label');
+  const speedLabel = document.getElementById('speed-label');
+  
+  if (frameLabel) frameLabel.textContent = frame.frame;
+  if (weightLabel) weightLabel.textContent = `${frame.weight} kg`;
+  if (powerLabel) powerLabel.textContent = `${power.toFixed(1)} kW`;
+  if (speedLabel) speedLabel.textContent = `${Math.round(speed)} RPM`;
+  
+  // Update motor body size based on power
+  const motorBody = document.getElementById('motor-body');
+  const motorCircle = document.querySelector('.motor-diagram circle');
+  
+  if (motorBody) {
+    // Scale motor body width and height based on power (0.1 to 200 kW)
+    const minSize = 150;
+    const maxSize = 280;
+    const sizeScale = Math.min(200, Math.max(0.1, power));
+    const scaleFactor = ((sizeScale - 0.1) / (200 - 0.1)) * (maxSize - minSize) + minSize;
+    
+    motorBody.setAttribute('width', `${scaleFactor}`);
+    motorBody.setAttribute('height', `${scaleFactor * 0.4}`);
+    motorBody.setAttribute('x', `${200 - scaleFactor / 2}`);
+  }
+  
+  // Highlight the correct frame in the scale
+  document.querySelectorAll('.scale-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  
+  const scaleMarker = document.getElementById('scale-marker');
+  if (scaleMarker) {
+    scaleMarker.innerHTML = `
+      <span class="size-name">${frame.frame}</span>
+      <span class="size-power">${power.toFixed(1)} kW</span>
+    `;
+    scaleMarker.classList.add('active');
+  }
 }
 
 // Initialize on page load

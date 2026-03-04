@@ -101,6 +101,79 @@ main {
   gap: 0.8rem;
 }
 
+.diagram-section {
+  padding: 1.5rem;
+}
+
+.diagram-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.motor-diagram {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(255, 140, 0, 0.2));
+}
+
+.size-scale {
+  width: 100%;
+  max-width: 500px;
+}
+
+.scale-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+.scale-bar {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem;
+  background: #2a2a2a;
+  border-radius: 8px;
+  scrollbar-width: thin;
+}
+
+.scale-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.6rem 0.8rem;
+  background: #333333;
+  border-radius: 6px;
+  border: 2px solid #444444;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.scale-item.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.size-name {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.size-power {
+  font-size: 0.65rem;
+  opacity: 0.8;
+}
+
 .inputs-section {
   padding: 1.5rem;
 }

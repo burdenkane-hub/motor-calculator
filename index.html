@@ -22,6 +22,73 @@
           <button class="mode-btn" data-mode="custom">Custom</button>
         </div>
 
+        <!-- Motor Diagram Section -->
+        <section class="calc-card diagram-section">
+          <h2>Motor Visualization</h2>
+          <div class="diagram-container">
+            <svg class="motor-diagram" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid meet">
+              <!-- Motor Body -->
+              <rect id="motor-body" x="80" y="60" width="240" height="100" rx="10" fill="#ff8c00" opacity="0.8" stroke="#ffffff" stroke-width="2"/>
+              
+              <!-- Motor Center Circle -->
+              <circle cx="200" cy="110" cy="110" r="45" fill="#0a0a0a" stroke="#ff8c00" stroke-width="3"/>
+              <circle cx="200" cy="110" r="35" fill="none" stroke="#ff8c00" stroke-width="2"/>
+              
+              <!-- Motor Shaft -->
+              <rect x="195" y="25" width="10" height="40" fill="#ff8c00"/>
+              <circle cx="200" cy="20" r="8" fill="#ff8c00"/>
+              
+              <!-- Fan Blades -->
+              <path d="M 200 60 L 185 45 L 200 50 L 215 45 Z" fill="#ff8c00"/>
+              
+              <!-- Frame Label -->
+              <text id="frame-label" x="200" y="120" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="bold">IEC 90</text>
+              
+              <!-- Weight Label -->
+              <text x="200" y="200" text-anchor="middle" fill="var(--color-primary)" font-size="14" font-weight="600">
+                Weight: <tspan id="weight-label" fill="#ff8c00">35 kg</tspan>
+              </text>
+              
+              <!-- Power Label -->
+              <text x="50" y="230" fill="var(--color-muted)" font-size="12">
+                Power: <tspan id="power-label" fill="#ff8c00" font-weight="600">5 kW</tspan>
+              </text>
+              
+              <!-- Speed Label -->
+              <text x="300" y="230" fill="var(--color-muted)" font-size="12" text-anchor="end">
+                <tspan id="speed-label" fill="#ff8c00" font-weight="600">1500 RPM</tspan>
+              </text>
+            </svg>
+
+            <!-- Size Comparison Scale -->
+            <div class="size-scale">
+              <div class="scale-title">Frame Size Scale</div>
+              <div class="scale-bar">
+                <div class="scale-item">
+                  <span class="size-name">IEC 56</span>
+                  <span class="size-power">0.18 kW</span>
+                </div>
+                <div class="scale-item">
+                  <span class="size-name">IEC 71</span>
+                  <span class="size-power">0.75 kW</span>
+                </div>
+                <div class="scale-item active" id="scale-marker">
+                  <span class="size-name">IEC 90</span>
+                  <span class="size-power">5 kW</span>
+                </div>
+                <div class="scale-item">
+                  <span class="size-name">IEC 112</span>
+                  <span class="size-power">11 kW</span>
+                </div>
+                <div class="scale-item">
+                  <span class="size-name">IEC 132</span>
+                  <span class="size-power">22 kW</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Input Section -->
         <section class="calc-card inputs-section">
           <h2>Motor Inputs</h2>
